@@ -5,9 +5,9 @@ const FSFlag = require('./model/FSFlag');
 
 const flagsenseServiceMap = {};
 
-exports.createService = function (sdkId, sdkSecret, environment, userId, attributes) {
+exports.createService = function (sdkId, sdkSecret, environment, userId, attributes, deviceInfo, appInfo) {
 	if (!flagsenseServiceMap.hasOwnProperty(sdkId))
-		flagsenseServiceMap[sdkId] = new FlagsenseService(sdkId, sdkSecret, environment, new FSUser(userId, attributes));
+		flagsenseServiceMap[sdkId] = new FlagsenseService(sdkId, sdkSecret, environment, new FSUser(userId, attributes), deviceInfo, appInfo);
 	return flagsenseServiceMap[sdkId];
 }
 
@@ -20,5 +20,4 @@ exports.flag = function (flagId, defaultKey, defaultValue) {
 // waitForInitializationComplete()
 // getVariation(fsFlag)
 // recordEvent(fsFlag, eventName, value)
-// recordCodeError(fsFlag)
 // setMaxInitializationWaitTime(timeInMillis)
