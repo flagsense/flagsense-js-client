@@ -17,8 +17,8 @@ class Events {
 			machineId: uuidv4(),
 			sdkType: 'js',
 			environment: environment,
-			userId: fsUser.userId ? fsUser.userId.toString() : "",
-			userAttributes: Utility.toKeyValueArray(fsUser.attributes),
+			userId: fsUser && fsUser.userId ? fsUser.userId.toString() : "",
+			userAttributes: Utility.toKeyValueArray(fsUser ? fsUser.attributes : null),
 			deviceInfo: Utility.toKeyValueArray(deviceInfo),
 			appInfo: Utility.toKeyValueArray(appInfo)
 		};
@@ -35,6 +35,14 @@ class Events {
 	setFSUser(fsUser) {
 		this.body.userId = fsUser.userId ? fsUser.userId.toString() : "";
 		this.body.userAttributes = Utility.toKeyValueArray(fsUser.attributes);
+	}
+
+	setDeviceInfo(deviceInfo) {
+		this.body.deviceInfo = Utility.toKeyValueArray(deviceInfo);
+	}
+
+	setAppInfo(appInfo) {
+		this.body.appInfo = Utility.toKeyValueArray(appInfo);
 	}
 
 	addEvaluationCount(flagId, variantKey) {

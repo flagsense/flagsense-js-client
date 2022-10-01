@@ -1,5 +1,13 @@
 const functions = {};
 
+functions.isServer = function () {
+	return (typeof window === 'undefined');
+}
+
+functions.isBrowser = function () {
+	return (typeof window !== 'undefined');
+}
+
 functions.isEmpty = function (obj) {
 	if (!obj)
 		return true;
@@ -47,10 +55,14 @@ functions.toKeyValueArray = function (obj) {
 }
 
 functions.isInternetConnected = function () {
+	if (functions.isServer())
+		return true;
 	return window.navigator.onLine;
 }
 
 functions.isSafari = function () {
+	if (functions.isServer())
+		return false;
 	return navigator.vendor.indexOf("Apple") >= 0;
 }
 
