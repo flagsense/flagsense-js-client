@@ -51,6 +51,12 @@ class Flagsense {
 		return Utility.waitFor(this.initializationComplete.bind(this), this.maxInitializationWaitTime);
 	}
 
+	async waitForInitializationCompleteAsync() {
+		await Utility.invoke(
+			Utility.waitFor(this.initializationComplete.bind(this), this.maxInitializationWaitTime)
+		);
+	}
+
 	setFSUser(userId, attributes) {
 		this.fsUser = new FSUser(userId, attributes);
 		this.events.setFSUser(this.fsUser);
@@ -93,7 +99,7 @@ class Flagsense {
 		}
 		catch (err) {
 			// console.error(err);
-			this.events.addEvaluationCount(flagId, (defaultVariant && defaultVariant.key) ? defaultVariant.key : "default");
+			this.events.addEvaluationCount(flagId, (defaultVariant && defaultVariant.key) ? defaultVariant.key : "FS_Empty");
 			return defaultVariant;
 		}
 	}
@@ -105,7 +111,7 @@ class Flagsense {
 			return this.userVariant.evaluate(this.fsUser.userId, this.fsUser.attributes, flagId).key;
 		}
 		catch (err) {
-			return defaultVariantKey || "default";
+			return defaultVariantKey || "FS_Empty";
 		}
 	}
 

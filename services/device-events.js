@@ -10,6 +10,7 @@ class Events {
 		this.variations = [];
 		this.events = [];
 		this.captureDeviceEvents = Constants.CAPTURE_DEVICE_EVENTS;
+		this.captureFlagEvaluations = Constants.CAPTURE_FLAG_EVALUATIONS;
 
 		this.headers = headers;
 		this.body = {
@@ -38,7 +39,7 @@ class Events {
 
 	addEvaluationCount(flagId, variantKey) {
 		try {
-			if (!this.captureDeviceEvents || this.variations.length >= Constants.EVENT_CAPACITY)
+			if (!this.captureFlagEvaluations || this.variations.length >= Constants.EVENT_CAPACITY)
 				return;
 
 			this.variations.push({
@@ -71,15 +72,30 @@ class Events {
 	}
 
 	getRequestBody() {
-		if (!this.captureDeviceEvents || !Utility.isInternetConnected())
+		if ((!this.captureDeviceEvents && !this.captureFlagEvaluations) ||
+			!Utility.isInternetConnected())
 			return null;
 
 		const requestBody = cloneDeep(this.body);
-		requestBody.variations = this.variations.splice(0, this.variations.length);
-		requestBody.events = this.events.splice(0, this.events.length);
+
+		if (this.captureFlagEvaluations)
+			requestBody.variations = this.variations.splice(0, this.variations.length);
+		else
+			requestBody.variations = [];
+
+		if (this.captureDeviceEvents)
+			requestBody.events = this.events.splice(0, this.events.length);
+		else
+			requestBody.events = [];
 
 		if (requestBody.variations.length === 0 && requestBody.events.length === 0)
 			return null;
+
+		if (!this.captureDeviceEvents) {
+			requestBody.userAttributes = [];
+			requestBody.deviceInfo = [];
+			requestBody.appInfo = [];
+		}
 
 		return requestBody;
 	}
@@ -102,6 +118,9 @@ class Events {
 
 		if (config.captureDeviceEvents === false || config.captureDeviceEvents === true)
 			this.captureDeviceEvents = config.captureDeviceEvents;
+
+		if (config.captureEvaluations === false || config.captureEvaluations === true)
+			this.captureFlagEvaluations = config.captureEvaluations;
 	}
 
 	sendEventsOnHide() {
