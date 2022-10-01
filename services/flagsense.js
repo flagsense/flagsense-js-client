@@ -62,6 +62,14 @@ class Flagsense {
 		this.events.setFSUser(this.fsUser);
 	}
 
+	setDeviceInfo(deviceInfo) {
+		this.events.setDeviceInfo(deviceInfo);
+	}
+
+	setAppInfo(appInfo) {
+		this.events.setAppInfo(appInfo);
+	}
+
 	setMaxInitializationWaitTime(timeInMillis) {
 		this.maxInitializationWaitTime = timeInMillis;
 	}

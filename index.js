@@ -22,3 +22,5 @@ exports.flag = function (flagId, defaultKey, defaultValue) {
 // getVariation(fsFlag)
 // recordEvent(fsFlag, eventName, value)
 // setMaxInitializationWaitTime(timeInMillis)
+// setDeviceInfo(deviceInfo)
+// setAppInfo(appInfo)
