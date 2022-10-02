@@ -23,9 +23,9 @@ class Events {
 			appInfo: Utility.toKeyValueArray(appInfo)
 		};
 
-		if (Constants.CAPTURE_DEVICE_EVENTS) {
+		if (this.captureDeviceEvents || this.captureFlagEvaluations) {
 			setTimeout(() => {
-				this.sendEvents(false);
+				this.sendEvents();
 			}, Constants.EVENT_FLUSH_INITIAL_DELAY);
 		}
 
@@ -154,9 +154,11 @@ class Events {
 				console.log(err);
 		}
 
-		setTimeout(() => {
-			this.sendEvents();
-		}, Constants.EVENT_FLUSH_INTERVAL);
+		if (this.captureDeviceEvents || this.captureFlagEvaluations) {
+			setTimeout(() => {
+				this.sendEvents();
+			}, Constants.EVENT_FLUSH_INITIAL_DELAY);
+		}
 	}
 
 	asyncPostRequest(api, requestBody) {
